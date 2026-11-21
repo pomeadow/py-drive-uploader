@@ -25,7 +25,8 @@ Commands:
     python main.py check    verify credentials + folder access
     python main.py serve    run the server (default)
 
-Config (environment variables):
+Config (environment variables, or a git-ignored .env file next to main.py;
+real environment variables win over .env):
     DRIVE_FOLDER_ID   required: the parent Drive folder's id (from its URL)
     HOST / PORT       default 0.0.0.0 / 8766 (print server uses 8765)
     API_KEY           optional shared secret the app sends as X-Api-Key
@@ -61,6 +62,34 @@ from googleapiclient.http import MediaIoBaseUpload
 SCOPES = ["https://www.googleapis.com/auth/drive.file"]
 
 HERE = os.path.dirname(os.path.abspath(__file__))
+ENV_FILE = os.environ.get("ENV_FILE") or HERE
+
+
+def load_dotenv(path: str) -> None:
+  """Load KEY=VALUE lines from [path] into os.environ, if it exists.
+
+  Real environment variables win (e.g. set on Render), so .env is only a
+  local convenience. Blank lines and # comments are skipped; `export ` and
+  surrounding quotes are allowed.
+  """
+  try:
+    with open(path) as file:
+      lines = file.readlines()
+  except FileNotFoundError:
+    return
+  for line in lines:
+    line = line.strip()
+    if not line or line.startswith("#") or "=" not in line:
+      continue
+    key, value = line.removeprefix("export ").split("=", 1)
+    value = value.strip()
+    if len(value) >= 2 and value[0] == value[-1] and value[0] in "'\"":
+      value = value[1:-1]
+    os.environ.setdefault(key.strip(), value)
+
+
+load_dotenv(os.path.join(ENV_FILE, ".env"))
+
 OAUTH_CLIENT_FILE = os.path.join(HERE, "oauth-client.json")
 TOKEN_FILE = os.environ.get("TOKEN_FILE") or os.path.join(HERE, "token.json")
 

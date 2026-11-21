@@ -53,6 +53,13 @@ command writes `token.json`. You can run it on any machine with a browser, then 
 
 ## Configuration
 
+Set these as environment variables. Locally, the easier way is a `.env` file next to `main.py`,
+which is git-ignored and loaded at startup:
+
+```bash
+cp .env.example .env    # then fill in DRIVE_FOLDER_ID and API_KEY
+```
+
 | Variable | Required | Default | Purpose |
 |---|---|---|---|
 | `DRIVE_FOLDER_ID` | yes | | The parent Drive folder's ID (the last part of its URL) |
@@ -73,10 +80,10 @@ python3 -c "import secrets; print(secrets.token_urlsafe(32))"
 
 ```bash
 # Check that the token works and that the folder can be reached
-DRIVE_FOLDER_ID=<folder id> poetry run python main.py check
+poetry run python main.py check
 
 # Run the server
-DRIVE_FOLDER_ID=<folder id> API_KEY=<key> poetry run python main.py serve
+poetry run python main.py serve
 ```
 
 ## API
