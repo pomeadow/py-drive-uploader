@@ -1,0 +1,22 @@
+[project]
+name = "drive-uploader"
+version = "0.1.0"
+description = "Read Write to specific google drive folders that it can access"
+authors = [
+    {name = "pomeadow",email = "tchewyanqy@gmail.com"}
+]
+license = "MIT"
+requires-python = ">=3.15"
+dependencies = [
+    "google-api-python-client (>=2.202.0,<3.0.0)",
+    "google-auth-httplib2 (>=0.4.4,<0.5.0)",
+    "google-auth-oauthlib (>=1.5.0,<2.0.0)"
+]
+
+
+[build-system]
+requires = ["poetry-core>=2.0.0,<3.0.0"]
+build-backend = "poetry.core.masonry.api"
+
+[tool.poetry]
+package-mode=false
